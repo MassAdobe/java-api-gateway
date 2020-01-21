@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+
+    <!-- 这一句的意思是打印所有进入的信息 -->
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>
+
+    <springProperty scope="context" name="LOG_HOME" source="logging.fileLocation" defaultValue="/usr/local/data/logs"/>
+    <springProperty scope="context" name="LOG_FILE_NAME" source="spring.application.name"
+                    defaultValue="guanglian-gateway"/>
+
+    <!-- 控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- debug 日志文件会滚动 -->
+    <appender name="debugAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 当前的日志文件存放路径 -->
+        <file>${LOG_HOME}/${LOG_FILE_NAME}/cur/debug/server.debug.log</file>
+        <!-- 日志滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 历史日志文件的存放路径和名称 -->
+            <fileNamePattern>${LOG_HOME}/${LOG_FILE_NAME}/history/debug/server.debug.%d{yyyy-MM-dd}.log.gz
+            </fileNamePattern>
+            <!-- 日志文件最大的保存历史 数量-->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <!-- 日志文件中日志的格式 -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <!-- 用过滤器，只接受DEBUG级别的日志信息，其余全部过滤掉 -->
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- INFO 日志文件会滚动 -->
+    <appender name="infoAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 当前的日志文件存放路径 -->
+        <file>${LOG_HOME}/${LOG_FILE_NAME}/cur/info/server.info.log</file>
+        <!-- 日志滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 历史日志文件的存放路径和名称 -->
+            <fileNamePattern>${LOG_HOME}/${LOG_FILE_NAME}/history/info/server.info.%d{yyyy-MM-dd}.log.gz
+            </fileNamePattern>
+            <!-- 日志文件最大的保存历史 数量-->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <!-- 日志文件中日志的格式 -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <!-- 用过滤器，只接受INFO级别的日志信息，其余全部过滤掉 -->
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- ERROR 日志文件会滚动 -->
+    <appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 当前的日志文件存放路径 -->
+        <file>${LOG_HOME}/${LOG_FILE_NAME}/cur/error/server.error.log</file>
+        <!-- 日志滚动策略 -->
+        <!-- TimeBased默认是一天更新一次 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 历史日志文件的存放路径和名称 -->
+            <fileNamePattern>${LOG_HOME}/${LOG_FILE_NAME}/history/error/server.error.%d{yyyy-MM-dd}.log.gz
+            </fileNamePattern>
+            <!-- 日志文件最大的保存历史 数量-->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <!-- 日志文件中日志的格式 -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <!-- 用过滤器，只接受ERROR级别的日志信息，其余全部过滤掉 -->
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <logger name="com.guangl" level="DEBUG" additivity="false">
+        <!-- level表示只记录哪一个级别以上的日志 -->
+        <!-- 与appender进行绑定 -->
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="debugAppender"/>
+        <appender-ref ref="infoAppender"/>
+        <appender-ref ref="errorAppender"/>
+    </logger>
+
+    <!-- Mybatis日志 -->
+    <logger name="com.guangl.gateway.dao" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="debugAppender"/>
+    </logger>
+
+    <!-- 日志输出级别 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="debugAppender"/>
+        <appender-ref ref="infoAppender"/>
+        <appender-ref ref="errorAppender"/>
+    </root>
+</configuration>
