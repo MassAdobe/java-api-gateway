@@ -37,7 +37,7 @@
         <nacos-config.version>0.2.3</nacos-config.version>
         <nacos-config-actuator.version>0.2.3</nacos-config-actuator.version>
         <jwt.version>3.8.0</jwt.version>
-        <guava.version>27.1-jre</guava.version>
+        <guava.version>29.0-jre</guava.version>
         <pagehelper.version>1.2.10</pagehelper.version>
         <jackson-databind.verison>2.9.9</jackson-databind.verison>
         <tk-mybatis.version>2.1.5</tk-mybatis.version>
